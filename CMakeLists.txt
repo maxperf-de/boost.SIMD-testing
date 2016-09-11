@@ -28,6 +28,9 @@ set(
   "-Wall -Werror -O2 -pipe -pthread -fvisibility=hidden -std=gnu++14 -Wno-deprecated -g"
   )
 
+set(BOOST_ROOT /opt/itm_support/boost CACHE PATH "FIXME")
+find_package(Boost REQUIRED COMPONENTS system )
+
 # Find the Google Benchmark library.
 find_library(
   BENCHMARK_LIBRARY
@@ -42,6 +45,7 @@ message(STATUS "Found the Google Benchmark library:")
 message(STATUS "  ${BENCHMARK_LIBRARY}")
 
 include_directories(
+  ${Boost_INCLUDE_DIRS}
   /home/joachim/boost.simd/include
   /home/joachim/benchmark/include
 )
