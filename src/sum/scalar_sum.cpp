@@ -47,6 +47,6 @@ BM_Vectorsum(benchmark::State& state)
   state.SetLabel(ss.str());
 }
 
-BENCHMARK(BM_Vectorsum)->Range(8, 8 << 10);
+BENCHMARK(BM_Vectorsum)->Range(8, 8 << 20);
 
 BENCHMARK_MAIN()

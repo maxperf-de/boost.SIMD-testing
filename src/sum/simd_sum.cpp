@@ -20,16 +20,20 @@
 #include <boost/simd/pack.hpp>
 #include <boost/simd/meta/cardinal_of.hpp>
 #include <boost/simd/function/sum.hpp>
+#include <boost/simd/memory/allocator.hpp>
+
+
+typedef std::vector<double, boost::simd::allocator<double>> DoubleVector;
 
 int
-vectorsum(std::vector<int> &array)
+vectorsum(DoubleVector &array)
 {
-  constexpr int cardinalInteger = boost::simd::cardinal_of<boost::simd::pack<int>>();
+  constexpr int cardinalDouble = boost::simd::cardinal_of<boost::simd::pack<double>>();
   const size_t arraySize = array.size();
 
-  boost::simd::pack<int> sumPack{0};
-  for (size_t i = 0 ; i < arraySize ; i += cardinalInteger) {
-    sumPack += boost::simd::pack<int>(array.data() + i);
+  boost::simd::pack<double> sumPack{0};
+  for (size_t i = 0 ; i < arraySize ; i += cardinalDouble) {
+    sumPack += boost::simd::pack<double>(array.data() + i);
   }
 
   return boost::simd::sum(sumPack);
@@ -39,8 +43,8 @@ vectorsum(std::vector<int> &array)
 static void 
 BM_Vectorsum(benchmark::State& state) 
 {
-  int sum = 0;
-  std::vector<int> array(state.range(0));
+  double sum = 0;
+  DoubleVector array(state.range(0));
   std::iota(array.begin(), array.end(), 0);
 
   while (state.KeepRunning()) {
@@ -53,6 +57,6 @@ BM_Vectorsum(benchmark::State& state)
   state.SetLabel(ss.str());
 }
 
-BENCHMARK(BM_Vectorsum)->Range(8, 8 << 10);
+BENCHMARK(BM_Vectorsum)->Range(8, 8 << 20);
 
 BENCHMARK_MAIN()
